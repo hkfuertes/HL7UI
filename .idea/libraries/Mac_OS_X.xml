@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Mac_OS_X">
+    <CLASSES />
+    <JAVADOC />
+    <NATIVE>
+      <root url="file://$PROJECT_DIR$/rxtx-2.1-7-bins-r2/Mac_OS_X" />
+    </NATIVE>
+    <SOURCES />
+  </library>
+</component>
