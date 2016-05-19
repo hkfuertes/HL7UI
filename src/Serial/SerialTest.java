@@ -1,3 +1,5 @@
+package Serial;
+
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
@@ -40,22 +42,6 @@ public class SerialTest implements SerialPortEventListener {
      */
     private OutputStream output;
 
-    public static void main(String[] args) throws Exception {
-        SerialTest main = new SerialTest();
-        main.initialize();
-        Thread t = new Thread() {
-            public void run() {
-                //the following line will keep this app alive for 1000 seconds,
-                //waiting for events to occur and responding to them (printing incoming messages to console).
-                try {
-                    Thread.sleep(1000000);
-                } catch (InterruptedException ie) {
-                }
-            }
-        };
-        t.start();
-        System.out.println("Started");
-    }
 
     public void initialize() {
         CommPortIdentifier portId = null;
@@ -117,11 +103,25 @@ public class SerialTest implements SerialPortEventListener {
         if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
             try {
                 String inputLine = input.readLine();
-                System.out.println(inputLine);
+                if (spListener != null) {
+                    spListener.onLineReaded(inputLine);
+                }
+                //System.out.println(inputLine);
             } catch (Exception e) {
                 System.err.println(e.toString());
             }
         }
         // Ignore all the other eventTypes, but you should consider the other ones.
+    }
+
+    //Interface for getting Data from Port.
+    public interface SerialPortListener {
+        void onLineReaded(String line);
+    }
+
+    SerialPortListener spListener = null;
+
+    public void setSerialPortListener(SerialPortListener spListener) {
+        this.spListener = spListener;
     }
 }
