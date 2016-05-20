@@ -1,17 +1,17 @@
-package Serial;
+package Model;
 
-import Model.*;
+import Serial.SerialConexion;
 
 /**
  * Created by hkfuertes on 19/05/16.
  */
-public class HL7SerialConnector implements SerialTest.SerialPortListener {
+public class HL7SerialConnector implements SerialConexion.SerialPortListener {
 
-    private SerialTest st;
+    private SerialConexion st;
     private HL7Message current = null;
 
     public HL7SerialConnector() {
-        this.st = new SerialTest();
+        this.st = new SerialConexion();
         this.st.setSerialPortListener(this);
         this.st.initialize();
     }
@@ -41,6 +41,10 @@ public class HL7SerialConnector implements SerialTest.SerialPortListener {
             if (current != null)
                 current.addSegment(new HL7Segment(line));
         }
+    }
+
+    @Override
+    public void onCharReaded(char character) {
     }
 
     public interface HL7Listener {

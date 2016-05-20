@@ -21,13 +21,17 @@ public class ClientConnector implements Runnable {
         this.port = port;
     }
 
-    public void connect(String addr, int port) {
+    private void connect(String addr, int port) {
         try {
             socket = new Socket(addr, port);
             writer = new PrintWriter(new PrintStream(socket.getOutputStream()));
         } catch (IOException e) {
             System.out.println(e);
         }
+    }
+
+    private void connect() {
+        this.connect(this.addr, this.port);
     }
 
     public void send(String message) {
@@ -44,7 +48,15 @@ public class ClientConnector implements Runnable {
     @Override
     public void run() {
         while (socket == null || !socket.isConnected()) {
-            connect(this.addr, this.port);
+            connect();
         }
+    }
+
+    public boolean isSendable() {
+        return !(socket == null || !socket.isConnected());
+    }
+
+    public void stopDaemon() {
+        clientThread.interrupt();
     }
 }

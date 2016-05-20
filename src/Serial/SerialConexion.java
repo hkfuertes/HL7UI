@@ -11,7 +11,7 @@ import java.io.OutputStream;
 import java.util.Enumeration;
 
 
-public class SerialTest implements SerialPortEventListener {
+public class SerialConexion implements SerialPortEventListener {
     /**
      * The port we're normally going to use.
      */
@@ -20,7 +20,8 @@ public class SerialTest implements SerialPortEventListener {
             "/dev/ttyACM0", // Raspberry Pi
             "/dev/ttyUSB0", // Linux
             "COM3", // Windows
-            "/dev/tty.wchusbserialfa130"
+            "/dev/tty.wchusbserialfa130",
+            "/dev/tty.wchusbserialfd120"
     };
     /**
      * Milliseconds to block while waiting for port open
@@ -100,13 +101,27 @@ public class SerialTest implements SerialPortEventListener {
      * Handle an event on the serial port. Read the data and print it.
      */
     public synchronized void serialEvent(SerialPortEvent oEvent) {
+        char character;
+        String line = "";
         if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
             try {
+                /*
                 String inputLine = input.readLine();
                 if (spListener != null) {
                     spListener.onLineReaded(inputLine);
                 }
-                //System.out.println(inputLine);
+                */
+                while ((character = (char) input.read()) != '\n') {
+                    line += character;
+                    if (spListener != null)
+                        spListener.onCharReaded(character);
+                }
+
+                if (spListener != null) {
+                    spListener.onCharReaded('\n');
+                    spListener.onLineReaded(line);
+                    line = "";
+                }
             } catch (Exception e) {
                 System.err.println(e.toString());
             }
@@ -117,6 +132,8 @@ public class SerialTest implements SerialPortEventListener {
     //Interface for getting Data from Port.
     public interface SerialPortListener {
         void onLineReaded(String line);
+
+        void onCharReaded(char character);
     }
 
     SerialPortListener spListener = null;
