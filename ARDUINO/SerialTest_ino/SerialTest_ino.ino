@@ -68,7 +68,9 @@ String MSH (String grupo_id, String hora,  int id_mensaje){
     return "MSH|^~\\&|"+grupo_id+"ED^^||||"+hora+"||ORU^R01^ORU_R01|"+String(id_mensaje)+"|P|2.6|||AL|AL|||||"+grupo_id+"^^^";
 }
 String PID(String grupo_id){
-   return "PID|||"+grupo_id+"^^^UPNA^^^^^^||FUERTES^MIGUEL^J^I^SR^^L~FUERTES^MIGUEL^J^I^SR^^N|";
+   //return "PID|||"+grupo_id+"^^^UPNA^^^^^^||FUERTES^MIGUEL^J^I^SR^^L~FUERTES^MIGUEL^J^I^SR^^N|";
+   //return "PID||87345313|87345313^^^^CC||Mikel^Aldaz|Zaragüeta|19570418|M";
+   return "PID|||001677980||SMITH^CURTIS||19680219|M||||||||||929645156318|123456789|";
 }
 
 String OBR(String grupo_id){
@@ -86,3 +88,7 @@ String OBX2(uint8_t pulso){
 String OBX3(uint8_t saturacion){
   return "OBX|3|NM|20564-1^OXIMETRIA CORPORAL^LN|1|"+String(saturacion)+"|%^SATURACION EN SANGRE^UCUM|||||N|";
 }
+
+/*
+PID|||001677980||SMITH^CURTIS||19680219|M||||||||||929645156318|123456789|
+ */

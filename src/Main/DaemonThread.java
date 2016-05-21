@@ -8,7 +8,9 @@ import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.v26.message.ORU_R01;
+import ca.uhn.hl7v2.parser.CanonicalModelClassFactory;
 import ca.uhn.hl7v2.parser.PipeParser;
+import ca.uhn.hl7v2.validation.impl.NoValidation;
 
 /**
  * Created by hkfuertes on 20/05/16.
@@ -46,6 +48,7 @@ public class DaemonThread extends Thread implements MLLPConnector.MLLPLiestner {
         Message msg = parse(message);
         if (msg instanceof ca.uhn.hl7v2.model.v26.message.ORU_R01) {
             current = (ORU_R01) msg;
+            printDataToGUI(current);
         }
 
     }
@@ -53,6 +56,8 @@ public class DaemonThread extends Thread implements MLLPConnector.MLLPLiestner {
     public static Message parse(String message) {
         Message msg = null;
         HapiContext context = new DefaultHapiContext();
+        context.setModelClassFactory(new CanonicalModelClassFactory("2.6"));
+        context.setValidationContext(new NoValidation());
         PipeParser parser = context.getPipeParser();
         try {
             msg = parser.parse(message);
@@ -67,7 +72,14 @@ public class DaemonThread extends Thread implements MLLPConnector.MLLPLiestner {
             return mainui;
         }else{
             mainui = new MainFrame();
+            mainui.registerDaemon(this);
             return mainui;
         }
     }
+    
+    private void printDataToGUI(ORU_R01 msg){
+    	if(mainui != null)
+    		mainui.printMessage(msg);
+    }
+    
 }
