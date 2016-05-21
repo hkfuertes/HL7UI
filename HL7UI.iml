@@ -10,5 +10,6 @@
     <orderEntry type="library" name="rxtx-2" level="project" />
     <orderEntry type="library" name="Mac_OS_X" level="project" />
     <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="library" name="JGoodies Forms" level="project" />
   </component>
 </module>

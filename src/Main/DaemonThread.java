@@ -1,8 +1,8 @@
 package Main;
 
+import Graphics.MainFrame;
 import MirthConnect.ClientConnector;
 import Serial.MLLPConnector;
-import Serial.SerialConexion;
 import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.HapiContext;
@@ -17,6 +17,7 @@ public class DaemonThread extends Thread implements MLLPConnector.MLLPLiestner {
 
     ClientConnector client;
     ca.uhn.hl7v2.model.v26.message.ORU_R01 current;
+    private MainFrame mainui;
 
 
     public void connectToServer(String addr, int port) {
@@ -30,9 +31,7 @@ public class DaemonThread extends Thread implements MLLPConnector.MLLPLiestner {
 
     @Override
     public void run() {
-        SerialConexion sc = new SerialConexion();
-        sc.initialize();
-        MLLPConnector connector = new MLLPConnector(sc);
+        MLLPConnector connector = new MLLPConnector();
         connector.setMLLPListener(this);
     }
 
@@ -61,5 +60,14 @@ public class DaemonThread extends Thread implements MLLPConnector.MLLPLiestner {
             e.printStackTrace();
         }
         return msg;
+    }
+
+    public MainFrame getView(){
+        if(mainui != null){
+            return mainui;
+        }else{
+            mainui = new MainFrame();
+            return mainui;
+        }
     }
 }

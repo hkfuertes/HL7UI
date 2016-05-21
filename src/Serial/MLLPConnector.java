@@ -1,21 +1,27 @@
 package Serial;
 
+import Serial.SerialConexion.SerialPortListener;
+
 /**
  * Created by hkfuertes on 20/05/16.
  */
-public class MLLPConnector implements SerialConexion.SerialPortListener {
+public class MLLPConnector implements SerialPortListener {
     public static final char START_ELEMENT = 0x0b;
     public static final char END_ELEMENT = 0x1c;//0d;
     public static final char END_ELEMENT_2 = 0x0d;//0d;
-    private final SerialConexion sc;
+    private SerialConexion sc;
 
     MLLPLiestner listener;
     String current = null;
+    
+    public MLLPConnector(){
+    	this(new SerialConexion());
+    }
 
     public MLLPConnector(SerialConexion sc) {
         this.sc = sc;
         this.sc.setSerialPortListener(this);
-        //this.st.initialize();
+        this.sc.initialize();
     }
 
     //Nothing to do with this.

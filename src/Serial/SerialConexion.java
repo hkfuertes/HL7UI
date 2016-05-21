@@ -1,5 +1,6 @@
 package Serial;
 
+
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
@@ -12,9 +13,7 @@ import java.util.Enumeration;
 
 
 public class SerialConexion implements SerialPortEventListener {
-    /**
-     * The port we're normally going to use.
-     */
+
     private static final String PORT_NAMES[] = {
             "/dev/tty.usbserial-A9007UX1", // Mac OS X
             "/dev/ttyACM0", // Raspberry Pi
@@ -23,24 +22,14 @@ public class SerialConexion implements SerialPortEventListener {
             "/dev/tty.wchusbserialfa130",
             "/dev/tty.wchusbserialfd120"
     };
-    /**
-     * Milliseconds to block while waiting for port open
-     */
+
     private static final int TIME_OUT = 2000;
-    /**
-     * Default bits per second for COM port.
-     */
+
     private static final int DATA_RATE = 9600;
     SerialPort serialPort;
-    /**
-     * A BufferedReader which will be fed by a InputStreamReader
-     * converting the bytes into characters
-     * making the displayed results codepage independent
-     */
+
     private BufferedReader input;
-    /**
-     * The output stream to the port
-     */
+
     private OutputStream output;
 
 
@@ -86,10 +75,7 @@ public class SerialConexion implements SerialPortEventListener {
         }
     }
 
-    /**
-     * This should be called when you stop using the port.
-     * This will prevent port locking on platforms like Linux.
-     */
+
     public synchronized void close() {
         if (serialPort != null) {
             serialPort.removeEventListener();
@@ -97,20 +83,13 @@ public class SerialConexion implements SerialPortEventListener {
         }
     }
 
-    /**
-     * Handle an event on the serial port. Read the data and print it.
-     */
+
     public synchronized void serialEvent(SerialPortEvent oEvent) {
         char character;
         String line = "";
         if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
             try {
-                /*
-                String inputLine = input.readLine();
-                if (spListener != null) {
-                    spListener.onLineReaded(inputLine);
-                }
-                */
+
                 while ((character = (char) input.read()) != '\n') {
                     line += character;
                     if (spListener != null)
