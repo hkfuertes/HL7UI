@@ -10,7 +10,7 @@ import java.awt.Dimension;
 import javax.swing.JTextArea;
 
 public class RawInternalFrame extends JInternalFrame {
-	public JTextArea rawData;
+	private JTextArea rawData;
 
 	public RawInternalFrame() {
 		super("Datos en Crudo",true,true,true,true);
@@ -23,6 +23,10 @@ public class RawInternalFrame extends JInternalFrame {
 		
 		this.setSize(new Dimension(400,300));
 		this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
+	}
+	
+	public void appendMessage(String message){
+		this.rawData.append(message.replace("\r", ""));
 	}
 
 }

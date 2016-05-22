@@ -110,7 +110,7 @@ public class MainFrame extends JFrame implements ActionListener{
     }
     
     public void printMessage(ca.uhn.hl7v2.model.v26.message.ORU_R01 msg){
-    	rawData.rawData.append(msg.toString());
+    	rawData.appendMessage(msg.toString());
     	psif.printMessage(msg);
     }
     

@@ -1,4 +1,5 @@
 int cont, id_mensaje = 0;
+long paciente_id = 33805;
 void setup(){
   Serial.begin(9600);
 }
@@ -12,26 +13,26 @@ void loop(){
   Serial.print((char)0x0b); //vt
   
   Serial.print(MSH("PC25",d, id_mensaje));
-  Serial.print('\n'); 
+  Serial.print("\r\n"); 
   
-  Serial.print(PID("PC25"));
-  Serial.print('\n'); 
+  Serial.print(PID(String(paciente_id)));
+  Serial.print("\r\n"); 
   
   Serial.print( OBR("PC25"));
-  Serial.print('\n'); 
+  Serial.print("\r\n"); 
   
   Serial.print( OBX1(temperatura));
-  Serial.print('\n'); 
+  Serial.print("\r\n"); 
   
   Serial.print( OBX2(pulso));
-  Serial.print('\n'); 
+  Serial.print("\r\n"); 
   
   Serial.print( OBX3(saturacion));
-  Serial.print('\n'); 
+  Serial.print("\r\n"); 
   
   
   Serial.print((char)0x1c); //fs
-  Serial.print('\n'); 
+  Serial.print((char)0x0d); 
   // Fin ASSINC
   
   id_mensaje = id_mensaje + 1;
@@ -65,12 +66,12 @@ String date(long ms, int year, int month, int day, byte h, byte m, byte s){
 }
 
 String MSH (String grupo_id, String hora,  int id_mensaje){
-    return "MSH|^~\\&|"+grupo_id+"ED^^||||"+hora+"||ORU^R01^ORU_R01|"+String(id_mensaje)+"|P|2.6|||AL|AL|||||"+grupo_id+"^^^";
+    //return "MSH|^~\\&|"+grupo_id+"ED^^||||"+hora+"||ORU^R01^ORU_R01|"+String(id_mensaje)+"|P|2.6|||AL|AL|||||"+grupo_id+"^^^";
+    return "MSH|^~\\&|"+grupo_id+"||||"+hora+"||ORU^R01^ORU_R01|"+id_mensaje+"|P|2.6|||AL|AL|||||"+grupo_id;
 }
-String PID(String grupo_id){
-   //return "PID|||"+grupo_id+"^^^UPNA^^^^^^||FUERTES^MIGUEL^J^I^SR^^L~FUERTES^MIGUEL^J^I^SR^^N|";
-   //return "PID||87345313|87345313^^^^CC||Mikel^Aldaz|Zaragüeta|19570418|M";
-   return "PID|||001677980||SMITH^CURTIS||19680219|M||||||||||929645156318|123456789|";
+String PID(String paciente_id){
+   //return "PID|||"+paciente_id+"^^^UPNA^^^^^^||FUERTES^MIGUEL^J^I^SR^^L~FUERTES^MIGUEL^J^I^SR^^N";
+   return "PID||"+paciente_id+"^^^&UPNA|||Fuertes^Miguel^J";
 }
 
 String OBR(String grupo_id){
@@ -88,7 +89,3 @@ String OBX2(uint8_t pulso){
 String OBX3(uint8_t saturacion){
   return "OBX|3|NM|20564-1^OXIMETRIA CORPORAL^LN|1|"+String(saturacion)+"|%^SATURACION EN SANGRE^UCUM|||||N|";
 }
-
-/*
-PID|||001677980||SMITH^CURTIS||19680219|M||||||||||929645156318|123456789|
- */

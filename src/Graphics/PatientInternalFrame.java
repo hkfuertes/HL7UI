@@ -9,6 +9,10 @@ import javax.swing.JTextArea;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
+
+import Model.Paciente;
+import ca.uhn.hl7v2.model.v26.message.ORU_R01;
+
 import javax.swing.JTable;
 
 public class PatientInternalFrame extends JInternalFrame {
@@ -29,11 +33,13 @@ public class PatientInternalFrame extends JInternalFrame {
 		    {"19.00", new Float(37.1),new Integer(60), new Integer(98)},
 		    {"19.00", new Float(37.1),new Integer(60), new Integer(98)}
 		};
+	private Paciente paciente;
 
-	public PatientInternalFrame(String paciente) {
-		super(paciente,true,true,true,true);
-
+	public PatientInternalFrame(Paciente paciente) {
+		super(paciente.toString(),false,true,false,true);
 		
+		this.paciente = paciente;
+
 		this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 		getContentPane().setLayout(null);
 		
@@ -41,24 +47,27 @@ public class PatientInternalFrame extends JInternalFrame {
 		lblNombre.setBounds(6, 6, 61, 16);
 		getContentPane().add(lblNombre);
 		
-		paciente_nombre = new JLabel("");
+		paciente_nombre = new JLabel(paciente.nombre + " " + paciente.apellidos);
 		paciente_nombre.setBounds(65, 6, 361, 16);
 		getContentPane().add(paciente_nombre);
 		
-		JLabel lblEnddevice = new JLabel("END_DEVICE:");
-		lblEnddevice.setBounds(6, 28, 83, 16);
-		getContentPane().add(lblEnddevice);
-		
-		JLabel paciente_enddevice = new JLabel("");
-		paciente_enddevice.setBounds(96, 28, 324, 16);
-		getContentPane().add(paciente_enddevice);
-		
 		table = new JTable(testdata, columnNames);
-		table.setBounds(6, 56, 414, 192);
+		table.setBounds(6, 34, 464, 214);
 		getContentPane().add(table);
+		
+		this.setSize(new Dimension(500, 300));
+		this.setLocation(0, 0);
 	}
 	
-	public void printMessage(ca.uhn.hl7v2.model.v26.message.ORU_R01 message){
+	public void printMessage(ORU_R01 message){
 		
+	}
+	
+	public Paciente getPaciente(){
+		return paciente;
+	}
+	
+	public String toString(){
+		return paciente.toString();
 	}
 }
