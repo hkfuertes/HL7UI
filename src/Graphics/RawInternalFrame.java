@@ -26,7 +26,7 @@ public class RawInternalFrame extends JInternalFrame {
 	}
 	
 	public void appendMessage(String message){
-		this.rawData.append(message.replace("\r", ""));
+		this.rawData.append(message.replace("\r", "\n"));
 	}
 
 }

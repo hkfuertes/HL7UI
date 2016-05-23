@@ -21,5 +21,8 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/Users/hkfuertes/Projects/HL7UI/rxtx-2.1-7-bins-r2/Mac_OS_X"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Users/hkfuertes/Projects/HL7UI/jfreechart-1.0.19/lib/junit-4.11.jar"/>
+	<classpathentry kind="lib" path="/Users/hkfuertes/Projects/HL7UI/jfreechart-1.0.19/lib/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="/Users/hkfuertes/Projects/HL7UI/jfreechart-1.0.19/lib/jfreechart-1.0.19.jar"/>
 	<classpathentry kind="output" path="out/production/HL7UI"/>
 </classpath>
