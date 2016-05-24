@@ -26,6 +26,7 @@ public class MainFrame extends JFrame implements ActionListener{
     private RawInternalFrame rawData = new RawInternalFrame();
     private TCPClientInternalFrame tcpFrame = null;
     private PatientSelectionInternalFrame psif = new PatientSelectionInternalFrame();
+    private MultiEKGInternalFrame mekg = new MultiEKGInternalFrame();
     
     private JToolBar toolBar;
     private JButton rawBtn, tcpBtn;
@@ -74,6 +75,11 @@ public class MainFrame extends JFrame implements ActionListener{
         tcpBtn.setActionCommand("tcp_client");
         tcpBtn.addActionListener(this);
         toolBar.add(tcpBtn);
+        
+        ekgmulti = new JButton("Multi");
+        ekgmulti.setActionCommand("multi");
+        ekgmulti.addActionListener(this);
+        toolBar.add(ekgmulti);
     }
     
     private void initComponents(){
@@ -87,6 +93,7 @@ public class MainFrame extends JFrame implements ActionListener{
         //Anadimos frames al panel
         desktopPane.add(rawData);
         desktopPane.add(psif);
+        desktopPane.add(mekg);
         
         mainPane.add(desktopPane, BorderLayout.CENTER);
     }
@@ -103,6 +110,8 @@ public class MainFrame extends JFrame implements ActionListener{
     	}else if(e.getActionCommand().equals("list")){
     		psif.setVisible(true);
     		
+    	}else if(e.getActionCommand().equals("multi")){
+    		mekg.setVisible(true);
     	}else if(e.getActionCommand().equals("exit")){
     		System.exit(0);
     	}
@@ -112,10 +121,12 @@ public class MainFrame extends JFrame implements ActionListener{
     public void printMessage(ca.uhn.hl7v2.model.v26.message.ORU_R01 msg){
     	rawData.appendMessage(msg.toString());
     	psif.printMessage(msg);
+    	mekg.printMessage(msg);
     }
     
     DaemonThread demonio;
     private JButton plist;
+    private JButton ekgmulti;
     public void registerDaemon(DaemonThread demonio){
     	this.demonio = demonio;
     	

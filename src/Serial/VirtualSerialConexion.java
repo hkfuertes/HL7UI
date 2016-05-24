@@ -61,9 +61,12 @@ public class VirtualSerialConexion extends SerialConexion implements Runnable {
 		Random rand = new Random();
 		float finalX = rand.nextFloat() * (maxX - minX) + minX;
 		
-		String message = "MSH|^~\\&|PC25ED||||20160523154252.905+0200||ORU^R01^ORU_R01|"+contador+"|P|2.6|||AL|AL|||||PC25\r\n"+
-		"PID||PC25^^^&UPNA|||Fuertes^Miguel^J\r\n"+
-		"OBR|1|PC25|PC25|29274-8^Vital signs measurements^LN\r\n";
+		String message = "MSH|^~\\&|PC25ED||||20160523154252.905+0200||ORU^R01^ORU_R01|"+contador+"|P|2.6|||AL|AL|||||PC25\r\n";
+		if(finalX > 0.035f)
+			message += "PID||PC25^^^&UPNA|||Fuertes^Miguel^J\r\n";
+		else
+			message += "PID||PC26^^^&UPNA|||Fuertes^Javier^J\r\n";
+		message += "OBR|1|PC25|PC25|29274-8^Vital signs measurements^LN\r\n";
 		message += "OBX|1|NM|76056-1^ST amplitude.lead aVF^LN|1|"+finalX+"|mv^Mili volts^UCUM|||||N\r\n";
 		if(!hearRateOnly){
 			message += "OBX|2|NM|8310-5^TEMPERATURA CORPORAL^LN|1|37.5|Cel^GRADOS CENTIGRADO^UCUM|||||N\r\n"+
