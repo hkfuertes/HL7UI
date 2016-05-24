@@ -112,11 +112,23 @@ public class MaintTest {
 			obx3.getObservationResultStatus().setValue("N");
 			obx3.getObservationSubID().setValue("1");
 			
+			// OBX|3|NM|20564-1^OXIMETRIA CORPORAL^LN|1|37.5|%^SATURACION EN SANGRE^UCUM|||||N|
+			OBX obx4 = orderObservation.getOBSERVATION(3).getOBX();
+			obx4.getSetIDOBX().setValue("4");
+			obx4.getObservationIdentifier().getIdentifier().setValue("76056-1");
+			obx4.getObservationIdentifier().getText().setValue("ST amplitude.lead aVF");
+			obx4.getObservationIdentifier().getNameOfCodingSystem().setValue("LN");
+			obx4.getUnits().getIdentifier().setValue("mv");
+			obx4.getUnits().getText().setValue("Mili volts");
+			obx4.getUnits().getNameOfCodingSystem().setValue("UCUM");
+			obx4.getObservationResultStatus().setValue("N");
+			obx4.getObservationSubID().setValue("1");
+			
 			// The first OBX has a value type of CE. So first, we populate OBX-2 with "CE"...
-			obx3.getValueType().setValue("MN");
-			NM nm3 = new NM(oru);
-			nm3.setValue("98");
-			obx3.getObservationValue(0).setData(nm3);
+			obx4.getValueType().setValue("MN");
+			NM nm4 = new NM(oru);
+			nm4.setValue("0.20");
+			obx4.getObservationValue(0).setData(nm4);
 			
 	
 			// Now, let's encode the message and look at the output

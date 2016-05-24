@@ -10,6 +10,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JToggleButton;
 import javax.swing.table.DefaultTableModel;
 
 import org.jfree.chart.ChartFactory;
@@ -28,10 +29,15 @@ import Model.ORUUtils;
 import Model.Observacion;
 import Model.Paciente;
 import ca.uhn.hl7v2.model.v26.message.ORU_R01;
+import javax.swing.JTabbedPane;
+import java.awt.FlowLayout;
+import javax.swing.JButton;
 
 public class PatientInternalFrame extends JInternalFrame {
 
+	private static TimeSeries ekgSeries;
 	public JTextArea rawData;
+	Observacion otemp, osat, opulse, oekg;
 	
 	String[] columnNames = {"Hora",
             "Temperatura",
@@ -43,7 +49,9 @@ public class PatientInternalFrame extends JInternalFrame {
 	private Paciente paciente;
 	private DefaultTableModel dtm;
 	private JTable table;
-	private JSplitPane splitPane;
+	private TimeSeries tmpSeries;
+	
+	private EKGPanel ekgPanel;
 
 	public PatientInternalFrame(Paciente paciente) {
 		super(paciente.toString(),true,true,true,true);
@@ -60,19 +68,56 @@ public class PatientInternalFrame extends JInternalFrame {
 		}
 		
 		table = new JTable(dtm);
-		//splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(table),new JPanel());
-		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(table),new ChartPanel( createJFreeChart() ));
-		getContentPane().add(splitPane, BorderLayout.CENTER);
+		ekgPanel = new EKGPanel();
+		
+		tmpSeries = new TimeSeries("TEMPERATURA");
+
+		ChartPanel tmp_chart = createTempChartPanel(tmpSeries);
+		
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.add(ekgPanel, "ECG");
+		tabbedPane.add(tmp_chart, "TEMPERATURA");
+		tabbedPane.add( new JScrollPane(table), "Datos");
+		
+		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 		
 		this.setSize(new Dimension(500, 300));
 		this.setLocation(0, 0);
 	}
 	
 	public void printMessage(ORU_R01 message){
-		ArrayList<Observacion> obsInMsg = ORUUtils.getObservaciones(message);
 		Mensaje msg = ORUUtils.getMensaje(message);
-		String[] row = new String[]{msg.hora.toLocaleString(),obsInMsg.get(0).toString(), obsInMsg.get(1).toString(),obsInMsg.get(2).toString()};
+		ArrayList<Observacion> obsInMsg = ORUUtils.getObservaciones(message);
+		
+		//Imprmimos el ecg en el panel.
+		ekgPanel.printMessage(message);
+		
+		for(Observacion obx : obsInMsg){
+			switch(obx.tipo){
+			case Observacion.TEMPERATURA_LOINC:
+				otemp = obx;
+				tmpSeries.add(new Millisecond(msg.hora), Double.parseDouble(obx.medida));
+				break;
+			case Observacion.PULSO_LOINC:
+				opulse = obx;
+				break;
+			case Observacion.SATURACION_LOINC:
+				osat = obx;
+				break;
+			case Observacion.EKG_LOINC:
+				oekg = obx;
+				break;
+			}
+		}
+
+		String[] row = new String[]{
+				msg.hora.toString(),
+				otemp != null ? otemp.toString():"", 
+				opulse != null ? opulse.toString():"",
+				osat != null ? osat.toString():""
+				};
 		dtm.addRow(row);
+		otemp = null; osat = null; opulse = null;
 	}
 	
 	public Paciente getPaciente(){
@@ -83,29 +128,17 @@ public class PatientInternalFrame extends JInternalFrame {
 		return paciente.toString();
 	}
 	
-	public JFreeChart createJFreeChart(){
+	public ChartPanel createTempChartPanel(TimeSeries tempSeries){
 		//http://www.jfree.org/jfreechart/api/javadoc/src-html/org/jfree/chart/demo/TimeSeriesChartDemo1.html
 		JFreeChart chart = ChartFactory.createTimeSeriesChart(
-				"ECG",  // title
-				graph[1],             // x-axis label
-				graph[0],   // y-axis label
-				createDataset(),            // data
+				"TEMPERATURA",  // title
+				"Tiempo",             // x-axis label
+				"Grados",   // y-axis label
+				new TimeSeriesCollection(tempSeries),            // data
 				false,               // create legend?
 				false,               // generate tooltips?
 				false               // generate URLs?
 				);
-		return chart;
-	}
-	
-	private static XYDataset createDataset() {
-		TimeSeries s1 = new TimeSeries("L&G European Index Trust");
-		for(int i = 0; i<20; i++){
-			s1.addOrUpdate(new Millisecond(),181);
-		}
-		
-		TimeSeriesCollection dataset = new TimeSeriesCollection();
-		dataset.addSeries(s1);
-		return dataset;
-	}
-	
+		return new ChartPanel(chart);
+	}	
 }
