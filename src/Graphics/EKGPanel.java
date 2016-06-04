@@ -4,7 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -31,6 +34,8 @@ public class EKGPanel extends JPanel implements ActionListener{
 	private JButton btnGuardar;
 	private boolean autoclear;
 	private Paciente paciente = null;
+	private Observacion ekg;
+	private Observacion mekg;
 
 	public EKGPanel(){
 		this(false);
@@ -77,12 +82,20 @@ public class EKGPanel extends JPanel implements ActionListener{
 		ArrayList<Observacion> obsInMsg = ORUUtils.getObservaciones(message);
 		
 		for(Observacion obx : obsInMsg){
-			if(obx.tipo.equals(Observacion.EKG_LOINC)){
-				if(capturar.isSelected() || autoclear)
-					ekgSeries.add(new Millisecond(msg.hora), Double.parseDouble(obx.medida));
-				break;
+			if(obx.tipo.equals(Observacion.EKG_DATA)){
+				//if(capturar.isSelected() || autoclear)
+				ekg = obx;
+					//ekgSeries.add(new Millisecond(msg.hora), Double.parseDouble(obx.medida));
+			}else if(obx.tipo.equals(Observacion.EKG_METADATA)){
+				mekg = obx;
 			}
 		}
+		int millis = 1000/Integer.parseInt(mekg.medida);
+		String[] medidas = ekg.medida.split("\\^");
+		for(int i = 0; i<medidas.length; i++){
+			ekgSeries.add(new Millisecond(date_plus_ms(msg.hora,i*millis)), Double.parseDouble(medidas[i]));
+		}
+		//System.out.println(mekg);
 	}
 	
 	private ChartPanel createEKGChartPanel(TimeSeries ekgSeries){
@@ -106,6 +119,19 @@ public class EKGPanel extends JPanel implements ActionListener{
 
 	public Paciente getPaciente() {
 		return paciente;
+	}
+	
+	public Date date_plus_ms (Date date, int millis) {
+	    
+	    Calendar newDate = Calendar.getInstance();
+	    newDate.setTimeInMillis(date.getTime());
+	    newDate.add(Calendar.MILLISECOND, millis);
+	    
+	    SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS M z");
+	    System.out.println(dateFormatter.format(newDate.getTime()));
+	    return newDate.getTime();
+	    
+
 	}
 
 }

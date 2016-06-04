@@ -2,6 +2,8 @@ package Model;
 
 import java.util.ArrayList;
 
+import ca.uhn.hl7v2.model.Type;
+import ca.uhn.hl7v2.model.v26.datatype.NA;
 import ca.uhn.hl7v2.model.v26.datatype.NM;
 import ca.uhn.hl7v2.model.v26.group.ORU_R01_OBSERVATION;
 import ca.uhn.hl7v2.model.v26.group.ORU_R01_ORDER_OBSERVATION;
@@ -45,7 +47,13 @@ public class ORUUtils {
 				Observacion ob = new Observacion();
 				OBX obx = obr.getOBX();
 				ob.tipo = obx.getObservationIdentifier().getIdentifier().getValue();
-				ob.medida = ((NM)obx.getObservationValue(0).getData()).getValue();
+				Type data = obx.getObservationValue(0).getData();
+				if(data instanceof NM){
+					ob.medida = ((NM)data).getValue();
+				}else if(data instanceof NA){
+					//Tomamos la ristra de pulsos
+					ob.medida = obx.getObservationValue(0).encode();
+				}
 				ob.unidades = obx.getUnits().getIdentifier().getValue();
 				obs.add(ob);
 			}

@@ -52,6 +52,7 @@ public class PatientInternalFrame extends JInternalFrame {
 	private TimeSeries tmpSeries;
 	
 	private EKGPanel ekgPanel;
+	private Observacion omekg;
 
 	public PatientInternalFrame(Paciente paciente) {
 		super(paciente.toString(),true,true,true,true);
@@ -104,10 +105,8 @@ public class PatientInternalFrame extends JInternalFrame {
 			case Observacion.SATURACION_LOINC:
 				osat = obx;
 				break;
-			case Observacion.EKG_LOINC:
-				oekg = obx;
-				break;
 			}
+			//System.out.println(obx);
 		}
 
 		String[] row = new String[]{
