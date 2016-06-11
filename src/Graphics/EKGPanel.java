@@ -83,18 +83,17 @@ public class EKGPanel extends JPanel implements ActionListener{
 		
 		for(Observacion obx : obsInMsg){
 			if(obx.tipo.equals(Observacion.EKG_DATA)){
-				//if(capturar.isSelected() || autoclear)
 				ekg = obx;
-					//ekgSeries.add(new Millisecond(msg.hora), Double.parseDouble(obx.medida));
 			}else if(obx.tipo.equals(Observacion.EKG_METADATA)){
 				mekg = obx;
 			}
 		}
 		int millis = 1000/Integer.parseInt(mekg.medida);
 		String[] medidas = ekg.medida.split("\\^");
-		for(int i = 0; i<medidas.length; i++){
-			ekgSeries.add(new Millisecond(date_plus_ms(msg.hora,i*millis)), Double.parseDouble(medidas[i]));
-		}
+		if(capturar.isSelected() || autoclear)
+			for(int i = 0; i<medidas.length; i++){
+				ekgSeries.add(new Millisecond(date_plus_ms(msg.hora,i*millis)), Double.parseDouble(medidas[i]));
+			}
 		//System.out.println(mekg);
 	}
 	
@@ -119,6 +118,19 @@ public class EKGPanel extends JPanel implements ActionListener{
 
 	public Paciente getPaciente() {
 		return paciente;
+	}
+	
+	public Date date_minus_ms (Date date, int millis) {
+	    
+	    Calendar newDate = Calendar.getInstance();
+	    newDate.setTimeInMillis(date.getTime());
+	    newDate.add(Calendar.MILLISECOND, millis);
+	    
+	    SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS M z");
+	    System.out.println(dateFormatter.format(newDate.getTime()));
+	    return newDate.getTime();
+	    
+
 	}
 	
 	public Date date_plus_ms (Date date, int millis) {

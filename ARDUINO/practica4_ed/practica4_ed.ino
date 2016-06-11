@@ -10,17 +10,11 @@ int cont, id_mensaje = 0;
 
 void setup(){
   Serial.begin(9600);
-  while (!Serial); // wait for serial port to connect. Needed for native USB port only
-  
   cont = 0;
-
- eHealth.initPulsioximeter ();
- PCintPort::attachInterrupt ( 6, readPulsioximetro, RISING );
+  eHealth.initPulsioximeter ();
+  PCintPort::attachInterrupt ( 6, readPulsioximetro, RISING );
 }
-void loop(){ 
-  
-  //Consumimos el segundo aqui.
-  float* muestras = recuperaMuestras();
+void loop(){
   // ASSYNC
   Serial.print((char)0x0b); //vt
   
@@ -28,7 +22,7 @@ void loop(){
   Serial.print("||ORU^R01^ORU_R01|"+String(id_mensaje)+"|P|2.6|||AL|AL|||||PC25^^^");
   Serial.print("\r\n"); 
   
-  Serial.print("PID||PC25^^^UPNA^^^^^^|||FUERTES^MIGUEL^J^I^SR^^L~FUERTES^MIGUEL^J^I^SR^^N|");
+  Serial.print("PID||PC25^^^&UPNA|||FUERTES^MIGUEL^J^I^SR^^L~FUERTES^MIGUEL^J^I^SR^^N|");
   Serial.print("\r\n"); 
   
   Serial.print( "OBR|1|PC25|PC25|29274-8^Vital signs measurements^LN|");
@@ -56,12 +50,13 @@ void loop(){
   //WCM Las muestras de ecg
   Serial.print( "OBX|5|NA|149504^ MDC_PULS_OXIM_PLETH^MDC |1|");
   for(int i = 0; i<NUMERO_MUESTRAS_SEGUNDO; i=i+1){
-    Serial.print(muestras[i]);
+    Serial.print(eHealth.getECG ());
     if(i != NUMERO_MUESTRAS_SEGUNDO -1)
       Serial.print("^");
+    delay(1000/NUMERO_MUESTRAS_SEGUNDO);
   }
-  Serial.print("1027^3504^4586^6612^8234^10592^11250^12183^11490"); //Muestras
-  Serial.print("||||||||| 20080515121000.100");
+  //Serial.print("1027^3504^4586^6612^8234^10592^11250^12183^11490"); //Muestras
+  Serial.print("|||||||||"+date((long)millis(),2016,05,10,20,49,00));
   Serial.print("\r\n");
 
   Serial.print((char)0x1c); //fs
@@ -78,15 +73,6 @@ void readPulsioximetro () {
  eHealth.readPulsioximeter ();
  cont = 0;
  }
-}
-
-float* recuperaMuestras(){
-  float retVal[NUMERO_MUESTRAS_SEGUNDO];
-  for(int i=0; i<NUMERO_MUESTRAS_SEGUNDO; i=i+1){
-   retVal[i] = eHealth.getECG ();
-   delay(1000/NUMERO_MUESTRAS_SEGUNDO);
-  }
-  return (float*) &retVal; 
 }
 
 String padMascara(unsigned long numero, unsigned long mascara){

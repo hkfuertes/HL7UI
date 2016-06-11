@@ -79,7 +79,7 @@ public class MainFrame extends JFrame implements ActionListener{
         ekgmulti = new JButton("Multi");
         ekgmulti.setActionCommand("multi");
         ekgmulti.addActionListener(this);
-        toolBar.add(ekgmulti);
+        //toolBar.add(ekgmulti);
     }
     
     private void initComponents(){
@@ -121,7 +121,7 @@ public class MainFrame extends JFrame implements ActionListener{
     public void printMessage(ca.uhn.hl7v2.model.v26.message.ORU_R01 msg){
     	rawData.appendMessage(msg.toString());
     	psif.printMessage(msg);
-    	mekg.printMessage(msg);
+    	//mekg.printMessage(msg);
     }
     
     DaemonThread demonio;
