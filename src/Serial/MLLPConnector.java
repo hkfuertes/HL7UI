@@ -15,7 +15,7 @@ public class MLLPConnector implements SerialPortListener {
     String current = null;
     
     public MLLPConnector(){
-    	this(new VirtualSerialConexion());
+    	this(new SerialConexion());
     }
 
     public MLLPConnector(SerialConexion sc) {

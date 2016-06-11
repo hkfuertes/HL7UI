@@ -10,7 +10,7 @@
 	<classpathentry kind="lib" path="C:/Users/hkfuertes/Documents/GitHub/HL7UI/jfreechart-1.0.19/lib/jfreechart-1.0.19-swt.jar"/>
 	<classpathentry kind="lib" path="C:/Users/hkfuertes/Documents/GitHub/HL7UI/rxtx-2.1-7-bins-r2/RXTXcomm.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="HL7UI/rxtx-2.1-7-bins-r2/Windows"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/hkfuertes/Documents/GitHub/HL7UI/rxtx-2.1-7-bins-r2/Windows/mfz-rxtx-2.2-20081207-win-x64"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/hkfuertes/Documents/GitHub/HL7UI/hapi-dist-2.2-all/lib/slf4j-api-1.6.6.jar"/>

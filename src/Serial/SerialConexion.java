@@ -19,6 +19,9 @@ public class SerialConexion implements SerialPortEventListener {
             "/dev/ttyACM0", // Raspberry Pi
             "/dev/ttyUSB0", // Linux
             "COM3", // Windows
+            "COM5", // Windows
+            "COM9", // Windows
+            "COM11", // Windows
             "/dev/tty.wchusbserialfa130",
             "/dev/tty.wchusbserialfd120"
     };
